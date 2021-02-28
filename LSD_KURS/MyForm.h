@@ -5,6 +5,15 @@
 #include "random_generator.h"  
 #include "converters.h" // for custom-made converters that makes my life better
 #include <chrono> // for timing
+#include "benchmark_result.h"
+#include "correlation_coef.h"
+
+std::vector<int> GL_VEC;            // defining some useful values
+std::vector<benchmark_result> GL_RESULTS;
+int RAND_RANGE_MIN;
+int RAND_RANGE_MAX;
+int RAND_ARRAY_SIZE;
+
 
 namespace LSDKURS {
 
@@ -15,11 +24,6 @@ namespace LSDKURS {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-
-	std::vector<int> GL_VEC;            // defining some useful values
-	int RAND_RANGE_MIN;
-	int RAND_RANGE_MAX;
-	int RAND_ARRAY_SIZE;
 	/// <summary>
 	/// Сводка для MyForm
 	/// </summary>
@@ -35,6 +39,29 @@ namespace LSDKURS {
 	private: System::Windows::Forms::Button^ button5;
 	private: System::Windows::Forms::Label^ label4;
 	private: System::Windows::Forms::Button^ button6;
+	private: System::Windows::Forms::Panel^ results_panel;
+	private: System::Windows::Forms::Panel^ panel1;
+	private: System::Windows::Forms::TabControl^ tabControl2;
+	private: System::Windows::Forms::TabPage^ tabPage4;
+	private: System::Windows::Forms::DataVisualization::Charting::Chart^ main_result_graph;
+	private: System::Windows::Forms::TabPage^ tabPage5;
+	private: System::Windows::Forms::DataGridView^ main_data_table;
+
+
+
+
+	private: System::Windows::Forms::Button^ calculate_the_table;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ elements_amount;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ time;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ elements_amount_squared;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ elements_amount_multiplied_by_time;
+
+
+
+
+
+
+
 	private: System::Windows::Forms::ListBox^ listBox1;
 	public:
 
@@ -88,6 +115,10 @@ namespace LSDKURS {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->tabControl1 = (gcnew System::Windows::Forms::TabControl());
 			this->tabPage1 = (gcnew System::Windows::Forms::TabPage());
 			this->label4 = (gcnew System::Windows::Forms::Label());
@@ -96,7 +127,20 @@ namespace LSDKURS {
 			this->listBox1 = (gcnew System::Windows::Forms::ListBox());
 			this->run_sort = (gcnew System::Windows::Forms::Button());
 			this->tabPage2 = (gcnew System::Windows::Forms::TabPage());
+			this->results_panel = (gcnew System::Windows::Forms::Panel());
+			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->calculate_the_table = (gcnew System::Windows::Forms::Button());
+			this->tabControl2 = (gcnew System::Windows::Forms::TabControl());
+			this->tabPage4 = (gcnew System::Windows::Forms::TabPage());
+			this->main_result_graph = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
+			this->tabPage5 = (gcnew System::Windows::Forms::TabPage());
+			this->main_data_table = (gcnew System::Windows::Forms::DataGridView());
+			this->elements_amount = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->time = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->elements_amount_squared = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->elements_amount_multiplied_by_time = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->tabPage3 = (gcnew System::Windows::Forms::TabPage());
+			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->rand_array_size_field = (gcnew System::Windows::Forms::NumericUpDown());
@@ -108,9 +152,16 @@ namespace LSDKURS {
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->DEBUG_BOX = (gcnew System::Windows::Forms::ListBox());
-			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->tabControl1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
+			this->tabPage2->SuspendLayout();
+			this->results_panel->SuspendLayout();
+			this->panel1->SuspendLayout();
+			this->tabControl2->SuspendLayout();
+			this->tabPage4->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->main_result_graph))->BeginInit();
+			this->tabPage5->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->main_data_table))->BeginInit();
 			this->tabPage3->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rand_array_size_field))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rand_range_max_field))->BeginInit();
@@ -129,7 +180,7 @@ namespace LSDKURS {
 			this->tabControl1->Margin = System::Windows::Forms::Padding(4);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(789, 403);
+			this->tabControl1->Size = System::Drawing::Size(981, 561);
 			this->tabControl1->TabIndex = 0;
 			// 
 			// tabPage1
@@ -143,7 +194,7 @@ namespace LSDKURS {
 			this->tabPage1->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(4);
-			this->tabPage1->Size = System::Drawing::Size(781, 374);
+			this->tabPage1->Size = System::Drawing::Size(973, 532);
 			this->tabPage1->TabIndex = 0;
 			this->tabPage1->Text = L" метод LSD";
 			this->tabPage1->UseVisualStyleBackColor = true;
@@ -187,7 +238,7 @@ namespace LSDKURS {
 			this->listBox1->Location = System::Drawing::Point(339, 7);
 			this->listBox1->MultiColumn = true;
 			this->listBox1->Name = L"listBox1";
-			this->listBox1->Size = System::Drawing::Size(435, 356);
+			this->listBox1->Size = System::Drawing::Size(627, 500);
 			this->listBox1->TabIndex = 1;
 			// 
 			// run_sort
@@ -203,14 +254,141 @@ namespace LSDKURS {
 			// 
 			// tabPage2
 			// 
+			this->tabPage2->Controls->Add(this->results_panel);
 			this->tabPage2->Location = System::Drawing::Point(4, 25);
 			this->tabPage2->Margin = System::Windows::Forms::Padding(4);
 			this->tabPage2->Name = L"tabPage2";
 			this->tabPage2->Padding = System::Windows::Forms::Padding(4);
-			this->tabPage2->Size = System::Drawing::Size(781, 374);
+			this->tabPage2->Size = System::Drawing::Size(973, 532);
 			this->tabPage2->TabIndex = 1;
 			this->tabPage2->Text = L"уравнение связи";
 			this->tabPage2->UseVisualStyleBackColor = true;
+			// 
+			// results_panel
+			// 
+			this->results_panel->Controls->Add(this->panel1);
+			this->results_panel->Location = System::Drawing::Point(0, 0);
+			this->results_panel->Name = L"results_panel";
+			this->results_panel->Size = System::Drawing::Size(973, 532);
+			this->results_panel->TabIndex = 0;
+			// 
+			// panel1
+			// 
+			this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel1->Controls->Add(this->calculate_the_table);
+			this->panel1->Controls->Add(this->tabControl2);
+			this->panel1->Location = System::Drawing::Point(3, 3);
+			this->panel1->Name = L"panel1";
+			this->panel1->Size = System::Drawing::Size(520, 382);
+			this->panel1->TabIndex = 1;
+			// 
+			// calculate_the_table
+			// 
+			this->calculate_the_table->Location = System::Drawing::Point(7, 345);
+			this->calculate_the_table->Name = L"calculate_the_table";
+			this->calculate_the_table->Size = System::Drawing::Size(506, 30);
+			this->calculate_the_table->TabIndex = 2;
+			this->calculate_the_table->Text = L"заполненить таблицу и построить график";
+			this->calculate_the_table->UseVisualStyleBackColor = true;
+			this->calculate_the_table->Click += gcnew System::EventHandler(this, &MyForm::calculate_the_table_Click);
+			// 
+			// tabControl2
+			// 
+			this->tabControl2->Controls->Add(this->tabPage4);
+			this->tabControl2->Controls->Add(this->tabPage5);
+			this->tabControl2->Location = System::Drawing::Point(3, 3);
+			this->tabControl2->Name = L"tabControl2";
+			this->tabControl2->SelectedIndex = 0;
+			this->tabControl2->Size = System::Drawing::Size(517, 340);
+			this->tabControl2->TabIndex = 0;
+			// 
+			// tabPage4
+			// 
+			this->tabPage4->Controls->Add(this->main_result_graph);
+			this->tabPage4->Location = System::Drawing::Point(4, 25);
+			this->tabPage4->Name = L"tabPage4";
+			this->tabPage4->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage4->Size = System::Drawing::Size(509, 311);
+			this->tabPage4->TabIndex = 0;
+			this->tabPage4->Text = L"график";
+			this->tabPage4->UseVisualStyleBackColor = true;
+			// 
+			// main_result_graph
+			// 
+			chartArea1->Name = L"ChartArea1";
+			this->main_result_graph->ChartAreas->Add(chartArea1);
+			legend1->Name = L"Legend1";
+			this->main_result_graph->Legends->Add(legend1);
+			this->main_result_graph->Location = System::Drawing::Point(0, 0);
+			this->main_result_graph->Name = L"main_result_graph";
+			this->main_result_graph->Palette = System::Windows::Forms::DataVisualization::Charting::ChartColorPalette::Excel;
+			series1->ChartArea = L"ChartArea1";
+			series1->Legend = L"Legend1";
+			series1->Name = L"время";
+			this->main_result_graph->Series->Add(series1);
+			this->main_result_graph->Size = System::Drawing::Size(503, 344);
+			this->main_result_graph->TabIndex = 0;
+			this->main_result_graph->Text = L"график";
+			// 
+			// tabPage5
+			// 
+			this->tabPage5->Controls->Add(this->main_data_table);
+			this->tabPage5->Location = System::Drawing::Point(4, 25);
+			this->tabPage5->Name = L"tabPage5";
+			this->tabPage5->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage5->Size = System::Drawing::Size(509, 311);
+			this->tabPage5->TabIndex = 1;
+			this->tabPage5->Text = L"таблица";
+			this->tabPage5->UseVisualStyleBackColor = true;
+			// 
+			// main_data_table
+			// 
+			this->main_data_table->AllowUserToAddRows = false;
+			this->main_data_table->AllowUserToDeleteRows = false;
+			this->main_data_table->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->main_data_table->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(4) {
+				this->elements_amount,
+					this->time, this->elements_amount_squared, this->elements_amount_multiplied_by_time
+			});
+			this->main_data_table->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->main_data_table->GridColor = System::Drawing::SystemColors::ButtonHighlight;
+			this->main_data_table->Location = System::Drawing::Point(3, 3);
+			this->main_data_table->Name = L"main_data_table";
+			this->main_data_table->ReadOnly = true;
+			this->main_data_table->RowHeadersWidth = 60;
+			this->main_data_table->Size = System::Drawing::Size(503, 305);
+			this->main_data_table->TabIndex = 0;
+			this->main_data_table->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MyForm::dataGridView1_CellContentClick);
+			// 
+			// elements_amount
+			// 
+			this->elements_amount->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::AllCells;
+			this->elements_amount->FillWeight = 10;
+			this->elements_amount->HeaderText = L"кол-во элементов (X)";
+			this->elements_amount->Name = L"elements_amount";
+			this->elements_amount->ReadOnly = true;
+			this->elements_amount->Width = 141;
+			// 
+			// time
+			// 
+			this->time->HeaderText = L"время (Y)";
+			this->time->Name = L"time";
+			this->time->ReadOnly = true;
+			// 
+			// elements_amount_squared
+			// 
+			dataGridViewCellStyle1->NullValue = L"-";
+			this->elements_amount_squared->DefaultCellStyle = dataGridViewCellStyle1;
+			this->elements_amount_squared->FillWeight = 1000;
+			this->elements_amount_squared->HeaderText = L"X^2";
+			this->elements_amount_squared->Name = L"elements_amount_squared";
+			this->elements_amount_squared->ReadOnly = true;
+			// 
+			// elements_amount_multiplied_by_time
+			// 
+			this->elements_amount_multiplied_by_time->HeaderText = L"X*Y";
+			this->elements_amount_multiplied_by_time->Name = L"elements_amount_multiplied_by_time";
+			this->elements_amount_multiplied_by_time->ReadOnly = true;
 			// 
 			// tabPage3
 			// 
@@ -229,15 +407,26 @@ namespace LSDKURS {
 			this->tabPage3->Location = System::Drawing::Point(4, 25);
 			this->tabPage3->Name = L"tabPage3";
 			this->tabPage3->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage3->Size = System::Drawing::Size(781, 374);
+			this->tabPage3->Size = System::Drawing::Size(973, 532);
 			this->tabPage3->TabIndex = 2;
 			this->tabPage3->Text = L"панель отладки";
 			this->tabPage3->UseVisualStyleBackColor = true;
 			// 
+			// button6
+			// 
+			this->button6->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
+			this->button6->Location = System::Drawing::Point(807, 394);
+			this->button6->Name = L"button6";
+			this->button6->Size = System::Drawing::Size(160, 28);
+			this->button6->TabIndex = 11;
+			this->button6->Text = L"clear array";
+			this->button6->UseVisualStyleBackColor = true;
+			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
+			// 
 			// button5
 			// 
 			this->button5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
-			this->button5->Location = System::Drawing::Point(615, 270);
+			this->button5->Location = System::Drawing::Point(807, 428);
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(160, 28);
 			this->button5->TabIndex = 10;
@@ -248,7 +437,7 @@ namespace LSDKURS {
 			// button3
 			// 
 			this->button3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
-			this->button3->Location = System::Drawing::Point(615, 304);
+			this->button3->Location = System::Drawing::Point(807, 462);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(160, 29);
 			this->button3->TabIndex = 9;
@@ -259,7 +448,7 @@ namespace LSDKURS {
 			// rand_array_size_field
 			// 
 			this->rand_array_size_field->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->rand_array_size_field->Location = System::Drawing::Point(615, 121);
+			this->rand_array_size_field->Location = System::Drawing::Point(807, 121);
 			this->rand_array_size_field->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1000000, 0, 0, 0 });
 			this->rand_array_size_field->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 10, 0, 0, 0 });
 			this->rand_array_size_field->Name = L"rand_array_size_field";
@@ -270,7 +459,7 @@ namespace LSDKURS {
 			// rand_range_max_field
 			// 
 			this->rand_range_max_field->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->rand_range_max_field->Location = System::Drawing::Point(613, 76);
+			this->rand_range_max_field->Location = System::Drawing::Point(805, 76);
 			this->rand_range_max_field->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { -1, 0, 0, 0 });
 			this->rand_range_max_field->Name = L"rand_range_max_field";
 			this->rand_range_max_field->Size = System::Drawing::Size(160, 23);
@@ -279,7 +468,7 @@ namespace LSDKURS {
 			// rand_range_min_field
 			// 
 			this->rand_range_min_field->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->rand_range_min_field->Location = System::Drawing::Point(613, 27);
+			this->rand_range_min_field->Location = System::Drawing::Point(805, 27);
 			this->rand_range_min_field->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { -6, 0, 0, 0 });
 			this->rand_range_min_field->Name = L"rand_range_min_field";
 			this->rand_range_min_field->Size = System::Drawing::Size(160, 23);
@@ -289,7 +478,7 @@ namespace LSDKURS {
 			// 
 			this->label3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(614, 102);
+			this->label3->Location = System::Drawing::Point(806, 102);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(137, 16);
 			this->label3->TabIndex = 5;
@@ -299,7 +488,7 @@ namespace LSDKURS {
 			// 
 			this->label2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(614, 55);
+			this->label2->Location = System::Drawing::Point(806, 55);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(138, 16);
 			this->label2->TabIndex = 4;
@@ -309,7 +498,7 @@ namespace LSDKURS {
 			// 
 			this->label1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(614, 7);
+			this->label1->Location = System::Drawing::Point(806, 7);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(133, 16);
 			this->label1->TabIndex = 3;
@@ -318,7 +507,7 @@ namespace LSDKURS {
 			// button2
 			// 
 			this->button2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->button2->Location = System::Drawing::Point(613, 150);
+			this->button2->Location = System::Drawing::Point(805, 150);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(160, 29);
 			this->button2->TabIndex = 2;
@@ -329,7 +518,7 @@ namespace LSDKURS {
 			// button1
 			// 
 			this->button1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
-			this->button1->Location = System::Drawing::Point(615, 339);
+			this->button1->Location = System::Drawing::Point(807, 497);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(160, 29);
 			this->button1->TabIndex = 1;
@@ -352,36 +541,33 @@ namespace LSDKURS {
 			this->DEBUG_BOX->ItemHeight = 15;
 			this->DEBUG_BOX->Location = System::Drawing::Point(6, 6);
 			this->DEBUG_BOX->Name = L"DEBUG_BOX";
-			this->DEBUG_BOX->Size = System::Drawing::Size(603, 345);
+			this->DEBUG_BOX->Size = System::Drawing::Size(795, 495);
 			this->DEBUG_BOX->TabIndex = 0;
-			// 
-			// button6
-			// 
-			this->button6->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
-			this->button6->Location = System::Drawing::Point(615, 236);
-			this->button6->Name = L"button6";
-			this->button6->Size = System::Drawing::Size(160, 28);
-			this->button6->TabIndex = 11;
-			this->button6->Text = L"clear array";
-			this->button6->UseVisualStyleBackColor = true;
-			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(7, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(789, 399);
+			this->ClientSize = System::Drawing::Size(983, 561);
 			this->Controls->Add(this->tabControl1);
 			this->Font = (gcnew System::Drawing::Font(L"Arial", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->Margin = System::Windows::Forms::Padding(4);
 			this->MinimumSize = System::Drawing::Size(500, 400);
 			this->Name = L"MyForm";
-			this->Text = L"MyForm";
+			this->Text = L"Курсовая работа";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->tabControl1->ResumeLayout(false);
 			this->tabPage1->ResumeLayout(false);
 			this->tabPage1->PerformLayout();
+			this->tabPage2->ResumeLayout(false);
+			this->results_panel->ResumeLayout(false);
+			this->panel1->ResumeLayout(false);
+			this->tabControl2->ResumeLayout(false);
+			this->tabPage4->ResumeLayout(false);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->main_result_graph))->EndInit();
+			this->tabPage5->ResumeLayout(false);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->main_data_table))->EndInit();
 			this->tabPage3->ResumeLayout(false);
 			this->tabPage3->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rand_array_size_field))->EndInit();
@@ -409,98 +595,181 @@ namespace LSDKURS {
 		void global_vec_show()  {	vec_to_listbox(GL_VEC); dh("global_vec_show()"); }
 		void global_vec_sort()  {	Radix(GL_VEC); dh("global_vec_sort()");}
 
+
 		void verify() {
 			run_sort -> Enabled = (GL_VEC.size() != 0);
 			button4 -> Enabled = (GL_VEC.size() != 0);
 		}
 
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {  // CLEAR THE DEBUG BOX
-		dh_clear();
-	}
+		private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {  // CLEAR THE DEBUG BOX
+			dh_clear();
+		}
 
 
-private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {        // ONLOAD EVENT
-	dh("MyForm_Load event");
+		private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {        // ONLOAD EVENT
+			dh("MyForm_Load event");
 
-	// setting constants 
-	RAND_RANGE_MIN = 0;
-	rand_range_min_field->Value = RAND_RANGE_MIN;
-	dh("RAND_RANGE_MIN set to "+s(RAND_RANGE_MIN));
+			// setting constants 
+			RAND_RANGE_MIN = 0;
+			rand_range_min_field->Value = RAND_RANGE_MIN;
+			dh("RAND_RANGE_MIN set to "+s(RAND_RANGE_MIN));
 
-	RAND_RANGE_MAX = 1000;
-	rand_range_max_field->Value = RAND_RANGE_MAX;
-	dh("RAND_RANGE_MAX set to " + s(RAND_RANGE_MAX));
+			RAND_RANGE_MAX = 1000;
+			rand_range_max_field->Value = RAND_RANGE_MAX;
+			dh("RAND_RANGE_MAX set to " + s(RAND_RANGE_MAX));
 
-	RAND_ARRAY_SIZE = 12000;
-	rand_array_size_field->Value = RAND_ARRAY_SIZE;
-	dh("RAND_ARRAY_SIZE set to " + s(RAND_ARRAY_SIZE));
-}
+			RAND_ARRAY_SIZE = 12000;
+			rand_array_size_field->Value = RAND_ARRAY_SIZE;
+			dh("RAND_ARRAY_SIZE set to " + s(RAND_ARRAY_SIZE));
+		}
 
+		private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {      // SEND CONSTS EVENT
 
+			if (RAND_RANGE_MIN != decToInt(rand_range_min_field->Value)) 
+			{
+				RAND_RANGE_MIN = decToInt(rand_range_min_field->Value);
+				dh("RAND_RANGE_MIN set to " + s(RAND_RANGE_MIN));
+			}
 
-private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {      // SEND CONSTS EVENT
+			if (RAND_RANGE_MAX != decToInt(rand_range_max_field->Value))
+			{
+				RAND_RANGE_MAX = decToInt(rand_range_max_field->Value);
+				dh("RAND_RANGE_MAX set to " + s(RAND_RANGE_MAX));
+			}
 
-	if (RAND_RANGE_MIN != decToInt(rand_range_min_field->Value)) 
-	{
-		RAND_RANGE_MIN = decToInt(rand_range_min_field->Value);
-		dh("RAND_RANGE_MIN set to " + s(RAND_RANGE_MIN));
-	}
+			if (RAND_ARRAY_SIZE != decToInt(rand_array_size_field->Value))
+			{
+				RAND_ARRAY_SIZE = decToInt(rand_array_size_field->Value);
+				dh("RAND_ARRAY_RANGE set to " + s(RAND_ARRAY_SIZE));
+			}
+		}
 
-	if (RAND_RANGE_MAX != decToInt(rand_range_max_field->Value))
-	{
-		RAND_RANGE_MAX = decToInt(rand_range_max_field->Value);
-		dh("RAND_RANGE_MAX set to " + s(RAND_RANGE_MAX));
-	}
+		void run_test()
+		{                           // 0 - main array read, 1 - main array write, 2 - auxiliary array read, 3 - auxiliary array write
+			dh("array size: " + s(RAND_ARRAY_SIZE));
+			dh("minimum: " + s(RAND_RANGE_MIN));
+			dh("maximum: " + s(RAND_RANGE_MAX));
 
-	if (RAND_ARRAY_SIZE != decToInt(rand_array_size_field->Value))
-	{
-		RAND_ARRAY_SIZE = decToInt(rand_array_size_field->Value);
-		dh("RAND_ARRAY_RANGE set to " + s(RAND_ARRAY_SIZE));
-	}
-}
+			auto begin = std::chrono::steady_clock::now();
+			auto c = RadixCount(GL_VEC);
+			auto end = std::chrono::steady_clock::now();
+			auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 
-	   void run_test()
-	   {                           // 0 - main array read, 1 - main array write, 2 - auxiliary array read, 3 - auxiliary array write
-		   dh("array size: " + s(RAND_ARRAY_SIZE));
-		   dh("minimum: " + s(RAND_RANGE_MIN));
-		   dh("maximum: " + s(RAND_RANGE_MAX));
+			dh("main array reads:" + c[0]);
+			dh("main array writes:" + c[1]);
+			dh("auxiliary array writes:" + c[3]);
+			dh("TOTAL SORTING TIME: " + s(elapsed_ms) + " ms"); 
 
-		   auto begin = std::chrono::steady_clock::now();
-		   auto c = RadixCount(GL_VEC);
-		   auto end = std::chrono::steady_clock::now();
-		   auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+			label4->Text = cs("длительность последней сортировки: " + s(elapsed_ms) + " ms");
+		}
 
-		   dh("main array reads:" + c[0]);
-		   dh("main array writes:" + c[1]);
-		   dh("auxiliary array writes:" + c[3]);
-		   dh("TOTAL SORTING TIME: " + s(elapsed_ms) + " ms"); 
+		private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e)   // RUN SORT BUTTON
+		{  
+			dh(""); dh("run sort event");
+			if (GL_VEC.size() != 0) run_test();
+			else dh("error: GL_VEC is empty");
+		}
 
-		   label4->Text = cs("длительность последней сортировки: " + s(elapsed_ms) + " ms");
-	   }
+		private: System::Void button3_Click_1(System::Object^ sender, System::EventArgs^ e)  // RUN SORT UNDER DEBUG BUTTON
+		{
+			dh(""); dh("run sort debug event");
+			if (GL_VEC.size() != 0) global_vec_sort();
+			else dh("error: GL_VEC is empty");
+		}
 
-private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e)   // RUN SORT BUTTON
-{  
-	dh(""); dh("run sort event");
-	if (GL_VEC.size() != 0) run_test();
-	else dh("error: GL_VEC is empty");
-}
-private: System::Void button3_Click_1(System::Object^ sender, System::EventArgs^ e)  // RUN SORT UNDER DEBUG BUTTON
-{
-	dh(""); dh("run sort debug event");
-	if (GL_VEC.size() != 0) global_vec_sort();
-	else dh("error: GL_VEC is empty");
-}
-private: System::Void fill_array_button_Click(System::Object^ sender, System::EventArgs^ e) {
-	global_vec_fill();
-}
-private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
-	global_vec_show();
-}
-private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
-	global_vec_fill();
-}
-private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
-	global_vec_clear();
-}
-};
+		private: System::Void fill_array_button_Click(System::Object^ sender, System::EventArgs^ e) {
+			global_vec_fill();
+		}
+
+		private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+			global_vec_show();
+		}
+
+		private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
+			global_vec_fill();
+		}
+
+		private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
+			global_vec_clear();
+		}
+
+		private: System::Void dataGridView1_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+		}
+
+		private: System::Void calculate_the_table_Click(System::Object^ sender, System::EventArgs^ e)  // DATA FOR TABLE
+		{ 
+			std::vector<size_t> elems_amount = { 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000 };
+			GL_RESULTS.resize(0); // clear the results array
+			size_t time;
+			size_t rand_array_size_temp = RAND_ARRAY_SIZE;
+
+			for (auto count : elems_amount)
+			{
+				RAND_ARRAY_SIZE = count;  // resizing target vector
+				dh("RAND_ARRAY_SIZE = " + s(count));
+				global_vec_fill();
+
+				auto begin = std::chrono::steady_clock::now();
+
+				Radix(GL_VEC); // SORT
+				//std::sort(GL_VEC.begin(), GL_VEC.end()); //test
+
+				auto end = std::chrono::steady_clock::now();
+				time = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+
+				benchmark_result res = benchmark_result(RAND_ARRAY_SIZE, time);
+
+				GL_RESULTS.push_back(res);
+				dh("sorted "+s(GL_RESULTS.back().get_elements_amount())+" in "+s(GL_RESULTS.back().get_time()+"ms"));
+			}
+			RAND_ARRAY_SIZE = rand_array_size_temp;
+			dh("fill_the_table();");
+			fill_the_table();  // outputting results
+			dh("draw_graph();");
+			draw_graph();
+		}
+
+		void fill_the_table() 
+		{
+			//main_data_table
+			main_data_table->Rows->Clear(); 
+			size_t row = 0;
+
+			for (benchmark_result el : GL_RESULTS)
+			{
+				main_data_table->Rows->Add();
+				main_data_table->Rows[row]->Cells[0]->Value = el.get_elements_amount();
+				main_data_table->Rows[row]->Cells[1]->Value = el.get_time();
+				main_data_table->Rows[row]->Cells[2]->Value = el.get_amount_squared();
+				main_data_table->Rows[row]->Cells[3]->Value = el.get_amount_x_time();
+				row++;
+			}
+		}
+		void draw_graph() 
+		{
+			size_t count = 0;
+			main_result_graph->Series["время"]->Points->Clear();
+
+			for (benchmark_result el : GL_RESULTS)
+			{
+				main_result_graph->Series["время"]->Points->AddXY(el.get_elements_amount(), el.get_time());
+				count++;
+			}
+			test();
+		}
+		
+		void test()  // mathematical shiet just for testing it out
+		{
+			auto res = analysis::do_calculations(GL_RESULTS);
+			dh("mid_x "+ s(res.get_mid_x()));
+			dh("mid_y " + s(res.get_mid_y()));
+			dh("mid_xy " + s(res.get_mid_xy()));
+			dh("dispersion_x " + s(res.get_dispersion_x()));
+			dh("dispersion_y " + s(res.get_dispersion_y()));
+			dh("mid_quad_deviation_x " + s(res.get_mid_quad_deviation_x()));
+			dh("mid_quad_deviation_y " + s(res.get_mid_quad_deviation_y()));
+			dh("coefficent_of_correlation " + s(res.get_coefficent_of_correlation()));
+		}
+	};
+	
 }
