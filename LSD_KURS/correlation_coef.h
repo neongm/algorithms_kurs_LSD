@@ -24,12 +24,12 @@ namespace analysis
 	class calculate
 	{
 	private:
-		std::vector<size_t> values_x;  // elements amount
-		std::vector<size_t> values_y;  // time 
+		std::vector<size_t> values_x;						// elements amount
+		std::vector<size_t> values_y;						// time 
 		size_t results_amount;
 
-		std::vector<unsigned long long> values_x_squared;  // x^2
-		std::vector<size_t> values_x_to_y;  // x*y
+		std::vector<unsigned long long> values_x_squared;	// x^2
+		std::vector<size_t> values_x_to_y;					// x*y
 		
 
 		long double mid_x;
@@ -42,7 +42,12 @@ namespace analysis
 		long double coefficent_of_correlation;
 		long double coefficent_of_determination;
 
+		// equasion 
+		double a0;
+		double a1;
+
 	public:
+
 		// CONSTRUCTORS
 		calculate();
 		calculate(const std::vector<size_t>& arr_x, const std::vector<size_t>& arr_y);
@@ -58,6 +63,7 @@ namespace analysis
 		void calc_mid_quad_deviation();
 		void calc_coefficent_of_correlation_full();
 		void calc_coefficent_of_determination();
+		void solve_equasion();
 
 		void update_auxilliary();
 		void update_all();
@@ -83,7 +89,6 @@ namespace analysis
 	};
 
 
-	
 	calculate::calculate()																				// CONSTRUCTORS
 	{
 		results_amount = 0;
@@ -158,7 +163,7 @@ namespace analysis
 		for (auto el : values_x) xi_minus_mid_x.push_back(el - mid_x);
 
 		std::vector<long long int> xi_minus_mid_y;
-		for (auto el : values_y) xi_minus_mid_y.push_back(el - mid_y);  
+		for (auto el : values_y) xi_minus_mid_y.push_back(el - mid_y);
 
 		int long long upper_part = 0;
 		for (size_t i = 0; i < xi_minus_mid_x.size(); i++) upper_part += xi_minus_mid_x.at(i) * xi_minus_mid_y.at(i);
@@ -177,6 +182,11 @@ namespace analysis
 	void calculate::calc_coefficent_of_determination()                  
 	{
 		coefficent_of_determination = pow(coefficent_of_correlation, 2);
+	}
+
+	void calculate::solve_equasion()
+	{
+		// TODO IN EQUASION BRANCH
 	}
 
 	void calculate::update_all()           // main update function
