@@ -3,6 +3,7 @@
 #include <msclr\marshal_cppstd.h>;
 #include <string>;
 
+
 int decToInt(const System::Decimal& dec)
 {
 	// System::Decimal to int32
