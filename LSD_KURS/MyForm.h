@@ -762,15 +762,15 @@ namespace LSDKURS {
 				dh("RAND_ARRAY_SIZE = " + s(count));
 				global_vec_fill();
 
+				// start
 				auto begin = std::chrono::steady_clock::now();
 
 				Radix(GL_VEC); // SORT
-				// std::sort(GL_VEC.begin(), GL_VEC.end()); // test
 
 				auto end = std::chrono::steady_clock::now();
 				time = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-
 				GL_ANALYZER.add_result(RAND_ARRAY_SIZE, time);
+				// end
 
 				dh("sorted "+s(GL_ANALYZER.get_values_x().back())+" in "+s(GL_ANALYZER.get_values_y().back()+"ms"));
 			}
@@ -778,14 +778,13 @@ namespace LSDKURS {
 
 			GL_ANALYZER.update_all();
 			dh("fill_the_table();");
-			fill_the_table();  // outputting results
+			fill_the_table(); 
 			dh("draw_graph();");
 			draw_graph();
 		}
 
 		void fill_the_table() 
 		{
-			//main_data_table
 			main_data_table->Rows->Clear(); 
 			size_t row = 0;
 			for (size_t i = 0; i < GL_ANALYZER.get_results_amount(); i++)
@@ -798,6 +797,7 @@ namespace LSDKURS {
 				row++;
 			}
 		}
+
 		void draw_graph() 
 		{
 			main_result_graph->Series["врем€"]->Points->Clear();
@@ -816,7 +816,11 @@ namespace LSDKURS {
 
 			LABEL_coefficient_of_determination->Text = cs("—овокупный коэффициент детерминации R^2: " + s(GL_ANALYZER.get_coefficent_of_determination()));
 			dh("coefficent_of_determination " + s(GL_ANALYZER.get_coefficent_of_determination()));
-
+			
+			LABEL_mid_quad_deviation_x->Text = cs("—редн€€ квадратическа€ ошибка объЄма выборки X: " + s(GL_ANALYZER.get_mid_quad_deviation_x()));
+			dh("mid_quad_deviation_x " + s(GL_ANALYZER.get_mid_quad_deviation_x()));
+			dh("a1 " + s(GL_ANALYZER.get_a1()));
+			dh("a0 " + s(GL_ANALYZER.get_a0()));
 		}
 	};
 	

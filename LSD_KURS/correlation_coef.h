@@ -31,6 +31,10 @@ namespace analysis
 		std::vector<unsigned long long> values_x_squared;	// x^2
 		std::vector<size_t> values_x_to_y;					// x*y
 		
+		long long unsigned sum_x;
+		long long unsigned sum_y;
+		long long unsigned sum_xy;
+		long long unsigned sum_x_squared;
 
 		long double mid_x;
 		long double mid_y;
@@ -46,6 +50,16 @@ namespace analysis
 		double a0;
 		double a1;
 
+		void calc_values_x_squared();
+		void calc_values_x_to_y();
+		void calc_mid();
+		void calc_dispersion();
+		void calc_mid_quad_deviation();
+		void calc_coefficent_of_correlation_full();
+		void calc_coefficent_of_determination();
+		void update_auxilliary();
+		void solve_equasion();
+
 	public:
 
 		// CONSTRUCTORS
@@ -56,20 +70,12 @@ namespace analysis
 		void set_arrays(const std::vector<size_t>& arr_x, const std::vector<size_t>& arr_y);
 		void add_result(const size_t& _amount, const size_t& _time);
 
-		void calc_values_x_squared();
-		void calc_values_x_to_y();
-		void calc_mid();
-		void calc_dispersion();
-		void calc_mid_quad_deviation();
-		void calc_coefficent_of_correlation_full();
-		void calc_coefficent_of_determination();
-		void solve_equasion();
-
-		void update_auxilliary();
 		void update_all();
 		void reset();
 
 		// GETTERS
+		double get_a0() { return a0; }
+		double get_a1() { return a1; }
 		long double get_coefficent_of_determination() { return coefficent_of_determination; }
 		long double get_coefficent_of_correlation() { return coefficent_of_correlation; }
 		long double get_mid_quad_deviation_x() { return mid_quad_deviation_x; }
@@ -116,6 +122,10 @@ namespace analysis
 	void calculate::update_auxilliary()
 	{
 		results_amount = values_x.size();
+		sum_x = std::accumulate(values_x.begin(), values_x.end(), 0);
+		sum_y = std::accumulate(values_y.begin(), values_y.end(), 0);
+		sum_xy = std::accumulate(values_x_to_y.begin(), values_x_to_y.end(), 0);
+		sum_x_squared = std::accumulate(values_x_squared.begin(), values_x_squared.end(), 0);
 	}
 
 
@@ -187,6 +197,10 @@ namespace analysis
 	void calculate::solve_equasion()
 	{
 		// TODO IN EQUASION BRANCH
+
+		a1 = (std::accumulate(values_x_to_y.begin(), values_x_to_y.end(), 0) * results_amount - (sum_x * sum_y)) /
+			((results_amount * std::accumulate(values_x_squared.begin(), values_x_squared.end(), 0)) - pow(sum_x, 2));
+		a0 = (sum_y + a1 * sum_x) / results_amount;
 	}
 
 	void calculate::update_all()           // main update function
@@ -199,6 +213,7 @@ namespace analysis
 		calc_mid_quad_deviation();
 		calc_coefficent_of_correlation_full();
 		calc_coefficent_of_determination();
+		solve_equasion();
 	}
 
 	calculate call_all_methods (const std::vector<size_t>& arr_x, const std::vector<size_t>& arr_y)
