@@ -31,7 +31,7 @@ void Radix(std::vector<int>& vec)
 std::vector<int> RadixCount(std::vector<int>& vec)
 {
 	// variables initiation
-	std::vector<int> counts = {0, 0, 0, 0};  // 0 - main array read, 1 - main array write, 2 - auxiliary array read, 3 - auxiliary array write
+	std::vector<int> counts = {0, 0, 0, 0, 0, 0};  // 0 - main array read, 1 - main array write, 2 - auxiliary array read, 3 - auxiliary array write, 4 - comparisons
 	std::vector<int> _vec[10];  // temporary arrays
 	auto it = vec.begin();      // iterator for writing new data
 	size_t temp;                // temporary variable for finding maximum base

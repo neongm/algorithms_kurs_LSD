@@ -83,6 +83,10 @@ namespace analysis
 		// GETTERS
 		double get_a0() { return a0; }
 		double get_a1() { return a1; }
+		long long unsigned get_sum_x() { return sum_x; }
+		long long unsigned get_sum_y() { return sum_y; }
+		long long unsigned get_sum_xy() { return sum_xy; }
+		long long unsigned get_sum_x_squared() { return sum_x_squared; }
 		long double get_coefficent_of_determination() { return coefficent_of_determination; }
 		long double get_coefficent_of_correlation() { return coefficent_of_correlation; }
 		long double get_mid_quad_deviation_x() { return mid_quad_deviation_x; }
