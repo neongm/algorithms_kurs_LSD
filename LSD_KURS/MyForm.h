@@ -15,6 +15,8 @@ int RAND_RANGE_MAX;
 int RAND_ARRAY_SIZE;
 analysis::calculate GL_ANALYZER;
 
+size_t DH_AUTOCLEAR_LIMIT = 200;
+
 namespace LSDKURS {
 
 	using namespace System;
@@ -41,10 +43,10 @@ namespace LSDKURS {
 	private: System::Windows::Forms::Button^ button6;
 	private: System::Windows::Forms::Panel^ results_panel;
 	private: System::Windows::Forms::Panel^ panel1;
-	private: System::Windows::Forms::TabControl^ tabControl2;
-	private: System::Windows::Forms::TabPage^ tabPage4;
+
+
 	private: System::Windows::Forms::DataVisualization::Charting::Chart^ main_result_graph;
-	private: System::Windows::Forms::TabPage^ tabPage5;
+
 	private: System::Windows::Forms::DataGridView^ main_data_table;
 
 
@@ -60,6 +62,18 @@ namespace LSDKURS {
 
 	private: System::Windows::Forms::Label^ LABEL_coefficient_of_correlation;
 	private: System::Windows::Forms::Label^ LABEL_mid_quad_deviation_x;
+	private: System::Windows::Forms::CheckBox^ check_box_autoclear;
+	private: System::Windows::Forms::Label^ label_main_array_read;
+
+
+	private: System::Windows::Forms::Label^ label_swaps;
+
+	private: System::Windows::Forms::Label^ label_comparisons;
+	private: System::Windows::Forms::Label^ label_main_array_writes;
+	private: System::Windows::Forms::Panel^ panel4;
+	private: System::Windows::Forms::Label^ label_equasion;
+	private: System::Windows::Forms::Label^ label5;
+	private: System::Windows::Forms::Panel^ panel3;
 
 
 
@@ -122,12 +136,16 @@ namespace LSDKURS {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea2 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^ legend2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
-			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->tabControl1 = (gcnew System::Windows::Forms::TabControl());
 			this->tabPage1 = (gcnew System::Windows::Forms::TabPage());
+			this->label_main_array_writes = (gcnew System::Windows::Forms::Label());
+			this->label_main_array_read = (gcnew System::Windows::Forms::Label());
+			this->label_swaps = (gcnew System::Windows::Forms::Label());
+			this->label_comparisons = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->fill_array_button = (gcnew System::Windows::Forms::Button());
@@ -141,16 +159,14 @@ namespace LSDKURS {
 			this->LABEL_coefficient_of_correlation = (gcnew System::Windows::Forms::Label());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->calculate_the_table = (gcnew System::Windows::Forms::Button());
-			this->tabControl2 = (gcnew System::Windows::Forms::TabControl());
-			this->tabPage4 = (gcnew System::Windows::Forms::TabPage());
 			this->main_result_graph = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
-			this->tabPage5 = (gcnew System::Windows::Forms::TabPage());
 			this->main_data_table = (gcnew System::Windows::Forms::DataGridView());
 			this->elements_amount = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->time = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->elements_amount_squared = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->elements_amount_multiplied_by_time = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->tabPage3 = (gcnew System::Windows::Forms::TabPage());
+			this->check_box_autoclear = (gcnew System::Windows::Forms::CheckBox());
 			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
@@ -163,21 +179,24 @@ namespace LSDKURS {
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->DEBUG_BOX = (gcnew System::Windows::Forms::ListBox());
+			this->panel3 = (gcnew System::Windows::Forms::Panel());
+			this->panel4 = (gcnew System::Windows::Forms::Panel());
+			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->label_equasion = (gcnew System::Windows::Forms::Label());
 			this->tabControl1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
 			this->tabPage2->SuspendLayout();
 			this->results_panel->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel1->SuspendLayout();
-			this->tabControl2->SuspendLayout();
-			this->tabPage4->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->main_result_graph))->BeginInit();
-			this->tabPage5->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->main_data_table))->BeginInit();
 			this->tabPage3->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rand_array_size_field))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rand_range_max_field))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rand_range_min_field))->BeginInit();
+			this->panel3->SuspendLayout();
+			this->panel4->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// tabControl1
@@ -197,6 +216,10 @@ namespace LSDKURS {
 			// 
 			// tabPage1
 			// 
+			this->tabPage1->Controls->Add(this->label_main_array_writes);
+			this->tabPage1->Controls->Add(this->label_main_array_read);
+			this->tabPage1->Controls->Add(this->label_swaps);
+			this->tabPage1->Controls->Add(this->label_comparisons);
 			this->tabPage1->Controls->Add(this->label4);
 			this->tabPage1->Controls->Add(this->button4);
 			this->tabPage1->Controls->Add(this->fill_array_button);
@@ -210,6 +233,42 @@ namespace LSDKURS {
 			this->tabPage1->TabIndex = 0;
 			this->tabPage1->Text = L" метод LSD";
 			this->tabPage1->UseVisualStyleBackColor = true;
+			// 
+			// label_main_array_writes
+			// 
+			this->label_main_array_writes->AutoSize = true;
+			this->label_main_array_writes->Location = System::Drawing::Point(11, 164);
+			this->label_main_array_writes->Name = L"label_main_array_writes";
+			this->label_main_array_writes->Size = System::Drawing::Size(46, 16);
+			this->label_main_array_writes->TabIndex = 8;
+			this->label_main_array_writes->Text = L"label7";
+			// 
+			// label_main_array_read
+			// 
+			this->label_main_array_read->AutoSize = true;
+			this->label_main_array_read->Location = System::Drawing::Point(11, 148);
+			this->label_main_array_read->Name = L"label_main_array_read";
+			this->label_main_array_read->Size = System::Drawing::Size(46, 16);
+			this->label_main_array_read->TabIndex = 7;
+			this->label_main_array_read->Text = L"label7";
+			// 
+			// label_swaps
+			// 
+			this->label_swaps->AutoSize = true;
+			this->label_swaps->Location = System::Drawing::Point(11, 132);
+			this->label_swaps->Name = L"label_swaps";
+			this->label_swaps->Size = System::Drawing::Size(46, 16);
+			this->label_swaps->TabIndex = 6;
+			this->label_swaps->Text = L"label6";
+			// 
+			// label_comparisons
+			// 
+			this->label_comparisons->AutoSize = true;
+			this->label_comparisons->Location = System::Drawing::Point(11, 116);
+			this->label_comparisons->Name = L"label_comparisons";
+			this->label_comparisons->Size = System::Drawing::Size(46, 16);
+			this->label_comparisons->TabIndex = 5;
+			this->label_comparisons->Text = L"label5";
 			// 
 			// label4
 			// 
@@ -288,109 +347,77 @@ namespace LSDKURS {
 			// panel2
 			// 
 			this->panel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->panel2->Controls->Add(this->LABEL_mid_quad_deviation_x);
-			this->panel2->Controls->Add(this->LABEL_coefficient_of_determination);
-			this->panel2->Controls->Add(this->LABEL_coefficient_of_correlation);
-			this->panel2->Location = System::Drawing::Point(526, 3);
+			this->panel2->Controls->Add(this->panel4);
+			this->panel2->Controls->Add(this->panel3);
+			this->panel2->Location = System::Drawing::Point(3, 391);
 			this->panel2->Name = L"panel2";
-			this->panel2->Size = System::Drawing::Size(444, 382);
+			this->panel2->Size = System::Drawing::Size(963, 138);
 			this->panel2->TabIndex = 3;
 			// 
 			// LABEL_mid_quad_deviation_x
 			// 
 			this->LABEL_mid_quad_deviation_x->AutoSize = true;
-			this->LABEL_mid_quad_deviation_x->Location = System::Drawing::Point(22, 50);
+			this->LABEL_mid_quad_deviation_x->Location = System::Drawing::Point(3, 58);
 			this->LABEL_mid_quad_deviation_x->Name = L"LABEL_mid_quad_deviation_x";
-			this->LABEL_mid_quad_deviation_x->Size = System::Drawing::Size(357, 16);
+			this->LABEL_mid_quad_deviation_x->Size = System::Drawing::Size(370, 16);
 			this->LABEL_mid_quad_deviation_x->TabIndex = 4;
 			this->LABEL_mid_quad_deviation_x->Text = L"—редн€€ квадратическа€ ошибка объЄма выборки X: - ";
 			// 
 			// LABEL_coefficient_of_determination
 			// 
 			this->LABEL_coefficient_of_determination->AutoSize = true;
-			this->LABEL_coefficient_of_determination->Location = System::Drawing::Point(22, 34);
+			this->LABEL_coefficient_of_determination->Location = System::Drawing::Point(3, 42);
 			this->LABEL_coefficient_of_determination->Name = L"LABEL_coefficient_of_determination";
-			this->LABEL_coefficient_of_determination->Size = System::Drawing::Size(316, 16);
+			this->LABEL_coefficient_of_determination->Size = System::Drawing::Size(329, 16);
 			this->LABEL_coefficient_of_determination->TabIndex = 3;
 			this->LABEL_coefficient_of_determination->Text = L"—овокупный коэффициент детерминации R^2: - ";
 			// 
 			// LABEL_coefficient_of_correlation
 			// 
 			this->LABEL_coefficient_of_correlation->AutoSize = true;
-			this->LABEL_coefficient_of_correlation->Location = System::Drawing::Point(22, 18);
+			this->LABEL_coefficient_of_correlation->Location = System::Drawing::Point(3, 26);
 			this->LABEL_coefficient_of_correlation->Name = L"LABEL_coefficient_of_correlation";
-			this->LABEL_coefficient_of_correlation->Size = System::Drawing::Size(277, 16);
+			this->LABEL_coefficient_of_correlation->Size = System::Drawing::Size(290, 16);
 			this->LABEL_coefficient_of_correlation->TabIndex = 2;
 			this->LABEL_coefficient_of_correlation->Text = L"ѕарный коэффициент коррел€ции X и Y: - ";
 			// 
 			// panel1
 			// 
 			this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel1->Controls->Add(this->main_data_table);
+			this->panel1->Controls->Add(this->main_result_graph);
 			this->panel1->Controls->Add(this->calculate_the_table);
-			this->panel1->Controls->Add(this->tabControl2);
 			this->panel1->Location = System::Drawing::Point(3, 3);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(520, 382);
+			this->panel1->Size = System::Drawing::Size(964, 382);
 			this->panel1->TabIndex = 1;
 			// 
 			// calculate_the_table
 			// 
 			this->calculate_the_table->Location = System::Drawing::Point(7, 345);
 			this->calculate_the_table->Name = L"calculate_the_table";
-			this->calculate_the_table->Size = System::Drawing::Size(506, 30);
+			this->calculate_the_table->Size = System::Drawing::Size(465, 30);
 			this->calculate_the_table->TabIndex = 2;
 			this->calculate_the_table->Text = L"заполненить таблицу и построить график";
 			this->calculate_the_table->UseVisualStyleBackColor = true;
 			this->calculate_the_table->Click += gcnew System::EventHandler(this, &MyForm::calculate_the_table_Click);
 			// 
-			// tabControl2
-			// 
-			this->tabControl2->Controls->Add(this->tabPage4);
-			this->tabControl2->Controls->Add(this->tabPage5);
-			this->tabControl2->Location = System::Drawing::Point(3, 3);
-			this->tabControl2->Name = L"tabControl2";
-			this->tabControl2->SelectedIndex = 0;
-			this->tabControl2->Size = System::Drawing::Size(517, 340);
-			this->tabControl2->TabIndex = 0;
-			// 
-			// tabPage4
-			// 
-			this->tabPage4->Controls->Add(this->main_result_graph);
-			this->tabPage4->Location = System::Drawing::Point(4, 25);
-			this->tabPage4->Name = L"tabPage4";
-			this->tabPage4->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage4->Size = System::Drawing::Size(509, 311);
-			this->tabPage4->TabIndex = 0;
-			this->tabPage4->Text = L"график";
-			this->tabPage4->UseVisualStyleBackColor = true;
-			// 
 			// main_result_graph
 			// 
-			chartArea2->Name = L"ChartArea1";
-			this->main_result_graph->ChartAreas->Add(chartArea2);
-			legend2->Name = L"Legend1";
-			this->main_result_graph->Legends->Add(legend2);
-			this->main_result_graph->Location = System::Drawing::Point(0, 0);
+			chartArea1->Name = L"ChartArea1";
+			this->main_result_graph->ChartAreas->Add(chartArea1);
+			legend1->Name = L"Legend1";
+			this->main_result_graph->Legends->Add(legend1);
+			this->main_result_graph->Location = System::Drawing::Point(-1, -1);
 			this->main_result_graph->Name = L"main_result_graph";
 			this->main_result_graph->Palette = System::Windows::Forms::DataVisualization::Charting::ChartColorPalette::Excel;
-			series2->ChartArea = L"ChartArea1";
-			series2->Legend = L"Legend1";
-			series2->Name = L"врем€";
-			this->main_result_graph->Series->Add(series2);
-			this->main_result_graph->Size = System::Drawing::Size(503, 344);
+			series1->ChartArea = L"ChartArea1";
+			series1->Legend = L"Legend1";
+			series1->Name = L"врем€";
+			this->main_result_graph->Series->Add(series1);
+			this->main_result_graph->Size = System::Drawing::Size(473, 344);
 			this->main_result_graph->TabIndex = 0;
 			this->main_result_graph->Text = L"график";
-			// 
-			// tabPage5
-			// 
-			this->tabPage5->Controls->Add(this->main_data_table);
-			this->tabPage5->Location = System::Drawing::Point(4, 25);
-			this->tabPage5->Name = L"tabPage5";
-			this->tabPage5->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage5->Size = System::Drawing::Size(509, 311);
-			this->tabPage5->TabIndex = 1;
-			this->tabPage5->Text = L"таблица";
-			this->tabPage5->UseVisualStyleBackColor = true;
 			// 
 			// main_data_table
 			// 
@@ -401,13 +428,12 @@ namespace LSDKURS {
 				this->elements_amount,
 					this->time, this->elements_amount_squared, this->elements_amount_multiplied_by_time
 			});
-			this->main_data_table->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->main_data_table->GridColor = System::Drawing::SystemColors::ButtonHighlight;
-			this->main_data_table->Location = System::Drawing::Point(3, 3);
+			this->main_data_table->Location = System::Drawing::Point(478, 3);
 			this->main_data_table->Name = L"main_data_table";
 			this->main_data_table->ReadOnly = true;
 			this->main_data_table->RowHeadersWidth = 60;
-			this->main_data_table->Size = System::Drawing::Size(503, 305);
+			this->main_data_table->Size = System::Drawing::Size(481, 372);
 			this->main_data_table->TabIndex = 0;
 			this->main_data_table->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MyForm::dataGridView1_CellContentClick);
 			// 
@@ -428,8 +454,8 @@ namespace LSDKURS {
 			// 
 			// elements_amount_squared
 			// 
-			dataGridViewCellStyle2->NullValue = L"-";
-			this->elements_amount_squared->DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle1->NullValue = L"-";
+			this->elements_amount_squared->DefaultCellStyle = dataGridViewCellStyle1;
 			this->elements_amount_squared->FillWeight = 1000;
 			this->elements_amount_squared->HeaderText = L"X^2";
 			this->elements_amount_squared->Name = L"elements_amount_squared";
@@ -443,6 +469,7 @@ namespace LSDKURS {
 			// 
 			// tabPage3
 			// 
+			this->tabPage3->Controls->Add(this->check_box_autoclear);
 			this->tabPage3->Controls->Add(this->button6);
 			this->tabPage3->Controls->Add(this->button5);
 			this->tabPage3->Controls->Add(this->button3);
@@ -462,6 +489,18 @@ namespace LSDKURS {
 			this->tabPage3->TabIndex = 2;
 			this->tabPage3->Text = L"панель отладки";
 			this->tabPage3->UseVisualStyleBackColor = true;
+			// 
+			// check_box_autoclear
+			// 
+			this->check_box_autoclear->AutoSize = true;
+			this->check_box_autoclear->Checked = true;
+			this->check_box_autoclear->CheckState = System::Windows::Forms::CheckState::Checked;
+			this->check_box_autoclear->Location = System::Drawing::Point(807, 368);
+			this->check_box_autoclear->Name = L"check_box_autoclear";
+			this->check_box_autoclear->Size = System::Drawing::Size(86, 20);
+			this->check_box_autoclear->TabIndex = 12;
+			this->check_box_autoclear->Text = L"autoclear";
+			this->check_box_autoclear->UseVisualStyleBackColor = true;
 			// 
 			// button6
 			// 
@@ -595,6 +634,45 @@ namespace LSDKURS {
 			this->DEBUG_BOX->Size = System::Drawing::Size(795, 495);
 			this->DEBUG_BOX->TabIndex = 0;
 			// 
+			// panel3
+			// 
+			this->panel3->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel3->Controls->Add(this->LABEL_coefficient_of_correlation);
+			this->panel3->Controls->Add(this->LABEL_mid_quad_deviation_x);
+			this->panel3->Controls->Add(this->LABEL_coefficient_of_determination);
+			this->panel3->Location = System::Drawing::Point(3, 15);
+			this->panel3->Name = L"panel3";
+			this->panel3->Size = System::Drawing::Size(469, 105);
+			this->panel3->TabIndex = 5;
+			// 
+			// panel4
+			// 
+			this->panel4->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel4->Controls->Add(this->label_equasion);
+			this->panel4->Controls->Add(this->label5);
+			this->panel4->Location = System::Drawing::Point(479, 15);
+			this->panel4->Name = L"panel4";
+			this->panel4->Size = System::Drawing::Size(479, 105);
+			this->panel4->TabIndex = 6;
+			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->Location = System::Drawing::Point(4, 28);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(122, 16);
+			this->label5->TabIndex = 0;
+			this->label5->Text = L"уравнение св€зи:";
+			// 
+			// label_equasion
+			// 
+			this->label_equasion->AutoSize = true;
+			this->label_equasion->Location = System::Drawing::Point(122, 28);
+			this->label_equasion->Name = L"label_equasion";
+			this->label_equasion->Size = System::Drawing::Size(13, 16);
+			this->label_equasion->TabIndex = 1;
+			this->label_equasion->Text = L"-";
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(7, 16);
@@ -614,18 +692,18 @@ namespace LSDKURS {
 			this->tabPage2->ResumeLayout(false);
 			this->results_panel->ResumeLayout(false);
 			this->panel2->ResumeLayout(false);
-			this->panel2->PerformLayout();
 			this->panel1->ResumeLayout(false);
-			this->tabControl2->ResumeLayout(false);
-			this->tabPage4->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->main_result_graph))->EndInit();
-			this->tabPage5->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->main_data_table))->EndInit();
 			this->tabPage3->ResumeLayout(false);
 			this->tabPage3->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rand_array_size_field))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rand_range_max_field))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rand_range_min_field))->EndInit();
+			this->panel3->ResumeLayout(false);
+			this->panel3->PerformLayout();
+			this->panel4->ResumeLayout(false);
+			this->panel4->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
@@ -636,6 +714,14 @@ namespace LSDKURS {
 		void dh(String^ message) { DEBUG_BOX -> Items -> Insert(DEBUG_BOX -> Items -> Count, message); }
 		void dh_clear() { DEBUG_BOX -> Items -> Clear(); }
 		// debug box handlers end
+
+		void dh_autoclear() 
+		{
+			if (check_box_autoclear->Checked == true)
+			{
+				if (DEBUG_BOX->Items->Count > DH_AUTOCLEAR_LIMIT) dh_clear();
+			}
+		}
 
 		void vec_to_listbox(const std::vector<int>& vec) {              // it uses gloval variable
 			listBox1->Items->Clear();
@@ -699,6 +785,8 @@ namespace LSDKURS {
 
 		void run_test()
 		{                           // 0 - main array read, 1 - main array write, 2 - auxiliary array read, 3 - auxiliary array write
+			dh_autoclear();
+
 			dh("array size: " + s(RAND_ARRAY_SIZE));
 			dh("minimum: " + s(RAND_RANGE_MIN));
 			dh("maximum: " + s(RAND_RANGE_MAX));
@@ -708,7 +796,9 @@ namespace LSDKURS {
 			auto end = std::chrono::steady_clock::now();
 			auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 
+			label_main_array_read->Text = cs("чтений из основного массива:" + c[0]);
 			dh("main array reads:" + c[0]);
+			label_main_array_writes->Text = cs("записей в основной массив:" + c[1]);
 			dh("main array writes:" + c[1]);
 			dh("auxiliary array writes:" + c[3]);
 			dh("TOTAL SORTING TIME: " + s(elapsed_ms) + " ms"); 
@@ -751,10 +841,13 @@ namespace LSDKURS {
 
 		private: System::Void calculate_the_table_Click(System::Object^ sender, System::EventArgs^ e)  // DATA FOR TABLE
 		{ 
-			std::vector<size_t> elems_amount = { 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000 };
+			//std::vector<size_t> elems_amount = { 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000 };
+			std::vector<size_t> elems_amount = { 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000 };
 			GL_ANALYZER.reset();
 			size_t time;
 			size_t rand_array_size_temp = RAND_ARRAY_SIZE;
+
+			dh_autoclear();
 
 			for (auto count : elems_amount)
 			{

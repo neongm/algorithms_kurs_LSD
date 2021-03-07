@@ -2,8 +2,15 @@
 #include <vector>
 #include <numeric>
 #include "benchmark_result.h"
+#include "MyForm.h"
 
-
+template<typename T>
+T accumulate_big(const std::vector<T>& array)
+{
+	T sum = 0;
+	for (T el : array) sum += el;
+	return sum;
+}
 
 long double get_mid(const std::vector<size_t>& arr_x, const std::vector<size_t>& arr_y)
 {
@@ -29,7 +36,7 @@ namespace analysis
 		size_t results_amount;
 
 		std::vector<unsigned long long> values_x_squared;	// x^2
-		std::vector<size_t> values_x_to_y;					// x*y
+		std::vector<unsigned long long> values_x_to_y;		// x*y
 		
 		long long unsigned sum_x;
 		long long unsigned sum_y;
@@ -121,6 +128,11 @@ namespace analysis
 
 	void calculate::update_auxilliary()
 	{
+		calc_mid();
+		calc_dispersion();
+		calc_values_x_squared();
+		calc_values_x_to_y();
+
 		results_amount = values_x.size();
 		sum_x = std::accumulate(values_x.begin(), values_x.end(), 0);
 		sum_y = std::accumulate(values_y.begin(), values_y.end(), 0);
@@ -197,19 +209,14 @@ namespace analysis
 	void calculate::solve_equasion()
 	{
 		// TODO IN EQUASION BRANCH
-
-		a1 = (std::accumulate(values_x_to_y.begin(), values_x_to_y.end(), 0) * results_amount - (sum_x * sum_y)) /
-			((results_amount * std::accumulate(values_x_squared.begin(), values_x_squared.end(), 0)) - pow(sum_x, 2));
+		a1 = (sum_xy * results_amount - (sum_x * sum_y)) /
+			((results_amount * sum_x_squared) - pow(sum_x, 2));
 		a0 = (sum_y + a1 * sum_x) / results_amount;
 	}
 
 	void calculate::update_all()           // main update function
 	{
 		update_auxilliary();
-		calc_values_x_squared();
-		calc_values_x_to_y();
-		calc_mid();
-		calc_dispersion();
 		calc_mid_quad_deviation();
 		calc_coefficent_of_correlation_full();
 		calc_coefficent_of_determination();
