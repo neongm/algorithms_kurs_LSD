@@ -77,6 +77,7 @@ namespace LSDKURS {
 	private: System::Windows::Forms::Label^ label_coef_result;
 	private: System::Windows::Forms::Label^ label_a0;
 	private: System::Windows::Forms::Label^ label_a1;
+	private: System::Windows::Forms::Label^ label6;
 
 
 
@@ -158,6 +159,8 @@ namespace LSDKURS {
 			this->results_panel = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->panel4 = (gcnew System::Windows::Forms::Panel());
+			this->label_a0 = (gcnew System::Windows::Forms::Label());
+			this->label_a1 = (gcnew System::Windows::Forms::Label());
 			this->label_equasion = (gcnew System::Windows::Forms::Label());
 			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->panel3 = (gcnew System::Windows::Forms::Panel());
@@ -187,8 +190,7 @@ namespace LSDKURS {
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->DEBUG_BOX = (gcnew System::Windows::Forms::ListBox());
-			this->label_a1 = (gcnew System::Windows::Forms::Label());
-			this->label_a0 = (gcnew System::Windows::Forms::Label());
+			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->tabControl1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
 			this->tabPage2->SuspendLayout();
@@ -213,7 +215,7 @@ namespace LSDKURS {
 			this->tabControl1->Controls->Add(this->tabPage1);
 			this->tabControl1->Controls->Add(this->tabPage2);
 			this->tabControl1->Controls->Add(this->tabPage3);
-			this->tabControl1->Location = System::Drawing::Point(0, -1);
+			this->tabControl1->Location = System::Drawing::Point(1, 1);
 			this->tabControl1->Margin = System::Windows::Forms::Padding(4);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
@@ -372,6 +374,24 @@ namespace LSDKURS {
 			this->panel4->Size = System::Drawing::Size(479, 105);
 			this->panel4->TabIndex = 6;
 			// 
+			// label_a0
+			// 
+			this->label_a0->AutoSize = true;
+			this->label_a0->Location = System::Drawing::Point(3, 2);
+			this->label_a0->Name = L"label_a0";
+			this->label_a0->Size = System::Drawing::Size(45, 16);
+			this->label_a0->TabIndex = 3;
+			this->label_a0->Text = L"a0 = -";
+			// 
+			// label_a1
+			// 
+			this->label_a1->AutoSize = true;
+			this->label_a1->Location = System::Drawing::Point(3, 18);
+			this->label_a1->Name = L"label_a1";
+			this->label_a1->Size = System::Drawing::Size(45, 16);
+			this->label_a1->TabIndex = 2;
+			this->label_a1->Text = L"a1 = -";
+			// 
 			// label_equasion
 			// 
 			this->label_equasion->AutoSize = true;
@@ -441,6 +461,7 @@ namespace LSDKURS {
 			// panel1
 			// 
 			this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel1->Controls->Add(this->label6);
 			this->panel1->Controls->Add(this->main_data_table);
 			this->panel1->Controls->Add(this->main_result_graph);
 			this->panel1->Controls->Add(this->calculate_the_table);
@@ -503,14 +524,14 @@ namespace LSDKURS {
 			this->main_result_graph->ChartAreas->Add(chartArea1);
 			legend1->Name = L"Legend1";
 			this->main_result_graph->Legends->Add(legend1);
-			this->main_result_graph->Location = System::Drawing::Point(-1, -1);
+			this->main_result_graph->Location = System::Drawing::Point(-1, 13);
 			this->main_result_graph->Name = L"main_result_graph";
 			this->main_result_graph->Palette = System::Windows::Forms::DataVisualization::Charting::ChartColorPalette::Excel;
 			series1->ChartArea = L"ChartArea1";
 			series1->Legend = L"Legend1";
 			series1->Name = L"время";
 			this->main_result_graph->Series->Add(series1);
-			this->main_result_graph->Size = System::Drawing::Size(473, 344);
+			this->main_result_graph->Size = System::Drawing::Size(473, 330);
 			this->main_result_graph->TabIndex = 0;
 			this->main_result_graph->Text = L"график";
 			// 
@@ -691,23 +712,14 @@ namespace LSDKURS {
 			this->DEBUG_BOX->Size = System::Drawing::Size(795, 495);
 			this->DEBUG_BOX->TabIndex = 0;
 			// 
-			// label_a1
+			// label6
 			// 
-			this->label_a1->AutoSize = true;
-			this->label_a1->Location = System::Drawing::Point(3, 18);
-			this->label_a1->Name = L"label_a1";
-			this->label_a1->Size = System::Drawing::Size(45, 16);
-			this->label_a1->TabIndex = 2;
-			this->label_a1->Text = L"a1 = -";
-			// 
-			// label_a0
-			// 
-			this->label_a0->AutoSize = true;
-			this->label_a0->Location = System::Drawing::Point(3, 2);
-			this->label_a0->Name = L"label_a0";
-			this->label_a0->Size = System::Drawing::Size(45, 16);
-			this->label_a0->TabIndex = 3;
-			this->label_a0->Text = L"a0 = -";
+			this->label6->AutoSize = true;
+			this->label6->Location = System::Drawing::Point(4, 3);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(311, 16);
+			this->label6->TabIndex = 3;
+			this->label6->Text = L"единицы измерения времени - микросекунды";
 			// 
 			// MyForm
 			// 
@@ -733,6 +745,7 @@ namespace LSDKURS {
 			this->panel3->ResumeLayout(false);
 			this->panel3->PerformLayout();
 			this->panel1->ResumeLayout(false);
+			this->panel1->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->main_data_table))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->main_result_graph))->EndInit();
 			this->tabPage3->ResumeLayout(false);
@@ -796,6 +809,10 @@ namespace LSDKURS {
 			RAND_ARRAY_SIZE = 12000;
 			rand_array_size_field->Value = RAND_ARRAY_SIZE;
 			dh("RAND_ARRAY_SIZE set to " + s(RAND_ARRAY_SIZE));
+
+			global_vec_fill();
+			global_vec_sort();
+			global_vec_clear();
 		}
 
 		private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {      // SEND CONSTS EVENT
@@ -863,9 +880,10 @@ namespace LSDKURS {
 			global_vec_fill();
 		}
 
-		private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
-			global_vec_show();
-		}
+		//private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+		//	global_vec_show();
+		//}
+		private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e);
 
 		private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
 			global_vec_fill();
@@ -878,10 +896,10 @@ namespace LSDKURS {
 		private: System::Void dataGridView1_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
 		}
 
-		private: System::Void calculate_the_table_Click(System::Object^ sender, System::EventArgs^ e)  // DATA FOR TABLE
-		{ 
+		void calc_the_table() 
+		{
 			dh("calculate_the_table event");
-			std::vector<size_t> elems_amount = { 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000 };
+			std::vector<size_t> elems_amount = { 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000 };
 			GL_ANALYZER.reset();
 			size_t time;
 			size_t rand_array_size_temp = RAND_ARRAY_SIZE;
@@ -900,17 +918,25 @@ namespace LSDKURS {
 				Radix(GL_VEC); // SORT
 
 				auto end = std::chrono::steady_clock::now();
-				time = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+				//time = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+				time = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
 				GL_ANALYZER.add_result(RAND_ARRAY_SIZE, time);
 				// end
 
-				dh("sorted "+s(GL_ANALYZER.get_values_x().back())+" in "+s(GL_ANALYZER.get_values_y().back()+"ms"));
+				dh("sorted " + s(GL_ANALYZER.get_values_x().back()) + " in " + s(GL_ANALYZER.get_values_y().back() + "	miroseconds"));
 			}
 			RAND_ARRAY_SIZE = rand_array_size_temp;
 
 			GL_ANALYZER.update_all();
-			fill_the_table(); 
+
+			if (GL_ANALYZER.get_coefficent_of_correlation() < 0.9) calc_the_table();
+			fill_the_table();
 			draw_graph();
+		}
+
+		private: System::Void calculate_the_table_Click(System::Object^ sender, System::EventArgs^ e)  // DATA FOR TABLE
+		{
+			calc_the_table();
 		}
 
 		void fill_the_table() 
@@ -964,6 +990,10 @@ namespace LSDKURS {
 			label_a0->Text = cs("a0 = "+GL_ANALYZER.get_a0());
 			label_a1->Text = cs("a1 = "+GL_ANALYZER.get_a1());
 			label_equasion->Text = cs("y = " + s(GL_ANALYZER.get_a0()) + " + " + s(GL_ANALYZER.get_a1()) + " * x1");
+
+
+
 		}
+
 	};
 }

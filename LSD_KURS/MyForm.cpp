@@ -1,4 +1,4 @@
-#include "MyForm.h"
+#include "MyForm.h"  // для доступа к нашему основному классу
 #include <Windows.h>
 using namespace LSDKURS;
 
