@@ -4,6 +4,8 @@
 #include "benchmark_result.h"
 #include "MyForm.h"
 
+#include <cassert>
+
 template<typename T>
 T accumulate_big(const std::vector<T>& array)
 {
@@ -134,6 +136,7 @@ namespace analysis
 	{
 		calc_mid();
 		calc_dispersion();
+		calc_mid_quad_deviation();
 		calc_values_x_squared();
 		calc_values_x_to_y();
 
@@ -212,16 +215,19 @@ namespace analysis
 
 	void calculate::solve_equasion()
 	{
-		// TODO IN EQUASION BRANCH
-		a1 = (sum_xy * results_amount - (sum_x * sum_y)) /
-			((results_amount * sum_x_squared) - pow(sum_x, 2));
-		a0 = (sum_y + a1 * sum_x) / results_amount;
+		auto avg_in = this->mid_x;
+		auto avg_out = this->mid_y;
+
+		auto cross_deviation = this->sum_xy - this->values_x.size() * avg_in * avg_out;
+		auto input_deviation = this->sum_x_squared - this->values_x.size() * avg_in * avg_in;
+
+		a1 = cross_deviation / input_deviation;
+		a0 = avg_out - a1 * avg_in;
 	}
 
 	void calculate::update_all()           // main update function
 	{
 		update_auxilliary();
-		calc_mid_quad_deviation();
 		calc_coefficent_of_correlation_full();
 		calc_coefficent_of_determination();
 		solve_equasion();

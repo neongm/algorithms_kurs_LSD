@@ -883,7 +883,9 @@ namespace LSDKURS {
 		//private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
 		//	global_vec_show();
 		//}
-		private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e);
+		private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+			global_vec_show();
+		};
 
 		private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
 			global_vec_fill();
@@ -923,7 +925,7 @@ namespace LSDKURS {
 				GL_ANALYZER.add_result(RAND_ARRAY_SIZE, time);
 				// end
 
-				dh("sorted " + s(GL_ANALYZER.get_values_x().back()) + " in " + s(GL_ANALYZER.get_values_y().back() + "	miroseconds"));
+				dh("sorted " + s(GL_ANALYZER.get_values_x().back()) + " in " + s(GL_ANALYZER.get_values_y().back() + "	miсroseconds"));
 			}
 			RAND_ARRAY_SIZE = rand_array_size_temp;
 
@@ -982,7 +984,7 @@ namespace LSDKURS {
 			LABEL_coefficient_of_determination->Text = cs("—овокупный коэффициент детерминации R^2: " + s(GL_ANALYZER.get_coefficent_of_determination()));
 			dh("coefficent_of_determination " + s(GL_ANALYZER.get_coefficent_of_determination()));
 			
-			LABEL_mid_quad_deviation_x->Text = cs("—редн€€ квадратическа€ ошибка объЄма выборки X: " + s(GL_ANALYZER.get_mid_quad_deviation_x()));
+			LABEL_mid_quad_deviation_x->Text = cs("—редн€€ квадратическа€ ошибка объЄма выборки Y: " + s(GL_ANALYZER.get_mid_quad_deviation_y()));
 			dh("mid_quad_deviation_x " + s(GL_ANALYZER.get_mid_quad_deviation_x()));
 			dh("a1 " + s(GL_ANALYZER.get_a1()));
 			dh("a0 " + s(GL_ANALYZER.get_a0()));
